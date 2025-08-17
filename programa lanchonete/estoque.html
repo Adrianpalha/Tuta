@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque | Lanchonete</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="pedidos.html">Pedidos</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="estoque.html">Estoque</a>
+            <a href="caixa.html">Caixa</a>
+            <a href="historico.html">Histórico</a>
+            <button id="btn-sair">Sair</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Estoque</h2>
+        <div id="lista-estoque"></div>
+    </main>
+    <script>
+        // Logout
+        document.getElementById('btn-sair').onclick = function() {
+            auth.signOut().then(() => window.location.href = "login.html");
+        };
+
+        function carregarEstoque() {
+            db.ref('produtos').once('value').then(snapshot => {
+                let html = '<ul>';
+                snapshot.forEach(child => {
+                    const p = child.val();
+                    let alerta = p.quantidade <= 5 ? ' <span style="color:red;">(Pouco estoque!)</span>' : '';
+                    html += `<li>${p.nome} - Qtd: ${p.quantidade}${alerta}</li>`;
+                });
+                html += '</ul>';
+                document.getElementById('lista-estoque').innerHTML = html;
+            });
+        }
+        carregarEstoque();
+    </script>
+</body>
+</html>

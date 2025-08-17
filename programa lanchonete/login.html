@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Tuta Lanches</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #43ea4c 0%, #a020f0 100%);
+            font-family: 'Montserrat', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .logo-tuta {
+            text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -2.0rem;      /* Valor original */
+            margin-bottom: -6.0rem;   /* Valor original */
+        }
+        .logo-tuta img {
+            width: 400px;            /* Valor original */
+            max-width: 90vw;
+            height: auto;
+            margin-bottom: 0.7rem;
+            object-fit: contain;
+            border: none;
+            box-shadow: none;
+            background: none;
+        }
+        .login-box {
+            background: #fff;
+            padding: 2.2rem 2rem 2rem 2rem; /* Valor original */
+            border-radius: 24px;
+            box-shadow: 0 8px 32px #43ea4c33, 0 2px 8px #a020f022;
+            text-align: center;
+            max-width: 370px;        /* Valor original */
+            width: 100%;
+            position: relative;
+            margin-bottom: 2rem;
+            margin-top: 0;
+        }
+        .input-group {
+            background: #ffe5b4;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        .input-icon {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #a020f0;
+        }
+        .input-icon svg {
+            margin-right: 0.7rem;
+            color: #43ea4c;
+        }
+        .input-icon input {
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            flex: 1;
+            outline: none;
+            color: #231f20;
+        }
+        .input-icon input::placeholder {
+            color: #a020f0;
+            opacity: 0.7;
+        }
+        .forgot-link {
+            text-align: right;
+            font-size: 0.95rem;
+            color: #a020f0;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 0.95rem;
+            background: linear-gradient(90deg, #43ea4c 60%, #a020f0 100%);
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 8px #43ea4c22;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .btn-login:hover {
+            background: linear-gradient(90deg, #a020f0 60%, #43ea4c 100%);
+            box-shadow: 0 4px 16px #43ea4c;
+        }
+        .cadastro-link {
+            color: #43ea4c;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .btn-cadastro {
+            width: 100%;
+            padding: 0.95rem;
+            background: #a020f0;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 0.7rem;
+            box-shadow: 0 2px 8px #a020f022;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .btn-cadastro:hover {
+            background: #43ea4c;
+        }
+        .btn-sem-cadastro {
+            background: none;
+            border: none;
+            color: #a020f0;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        #mensagem .alert {
+            color: #fff;
+            background: linear-gradient(90deg, #a020f0 60%, #43ea4c 100%);
+            border-radius: 6px;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px #1e7c2c22;
+        }
+        /* @media (max-width: 500px) {
+            .login-box {
+                padding: 1.2rem;
+                max-width: 98vw;
+            }
+            /* .logo-tuta img { width: 95vw; }
+         */
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="logo-tuta">
+        <img src="img/IMG-20240512-WA0015-removebg-preview.png" alt="Logo Tuta Lanches">
+    </div>
+    <div class="login-box">
+        <form id="form-login">
+            <div class="input-group">
+                <div class="input-icon">
+                    <!-- Usuário ícone -->
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 8-4 8-4s8 0 8 4"/></svg>
+                    <input type="email" name="email" placeholder="Usuário" required>
+                </div>
+                <div class="input-icon">
+                    <!-- Senha ícone -->
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="8" rx="2"/><path d="M12 14v2"/><path d="M8 10V8a4 4 0 1 1 8 0v2"/></svg>
+                    <input type="password" name="senha" placeholder="Senha" required>
+                </div>
+            </div>
+            <div class="forgot-link" onclick="alert('Função de recuperação não implementada!')">Esqueci minha senha</div>
+            <button type="submit" class="btn-login">ENTRAR</button>
+        </form>
+        <div id="mensagem"></div>
+        <div style="margin-bottom:1.2rem;">
+            <span>Não possui conta?</span>
+            <span class="cadastro-link" onclick="mostrarCadastro()">CADASTRA-SE</span>
+        </div>
+        <form id="form-cadastro" style="display:none;">
+            <div class="input-group">
+                <div class="input-icon">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 8-4 8-4s8 0 8 4"/></svg>
+                    <input type="email" name="email" placeholder="E-mail" required>
+                </div>
+                <div class="input-icon">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="8" rx="2"/><path d="M12 14v2"/><path d="M8 10V8a4 4 0 1 1 8 0v2"/></svg>
+                    <input type="password" name="senha" placeholder="Senha" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-cadastro">Cadastrar</button>
+        </form>
+        <button class="btn-sem-cadastro" onclick="window.location.href='pedidos.html'">Entrar sem Cadastro</button>
+    </div>
+    <script>
+        function mostrarMensagem(msg, tipo) {
+            const div = document.getElementById('mensagem');
+            div.innerHTML = `<div class="alert ${tipo}">${msg}</div>`;
+            setTimeout(() => div.innerHTML = '', 3000);
+        }
+        document.getElementById('form-login').onsubmit = function(e) {
+            e.preventDefault();
+            const email = this.email.value;
+            const senha = this.senha.value;
+            auth.signInWithEmailAndPassword(email, senha)
+                .then(() => window.location.href = "pedidos.html")
+                .catch(error => mostrarMensagem(error.message, 'erro'));
+        };
+        function mostrarCadastro() {
+            document.getElementById('form-login').style.display = 'none';
+            document.getElementById('form-cadastro').style.display = 'flex';
+        }
+        document.getElementById('form-cadastro').onsubmit = function(e) {
+            e.preventDefault();
+            const email = this.email.value;
+            const senha = this.senha.value;
+            auth.createUserWithEmailAndPassword(email, senha)
+                .then(() => {
+                    mostrarMensagem('Cadastro realizado! Faça login.', 'sucesso');
+                    document.getElementById('form-cadastro').style.display = 'none';
+                    document.getElementById('form-login').style.display = 'flex';
+                })
+                .catch(error => mostrarMensagem(error.message, 'erro'));
+        };
+    </script>
+</body>
+</html>

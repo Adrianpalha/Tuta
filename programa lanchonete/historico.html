@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico | Lanchonete</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="pedidos.html">Pedidos</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="estoque.html">Estoque</a>
+            <a href="caixa.html">Caixa</a>
+            <a href="historico.html">Histórico</a>
+            <button id="btn-sair">Sair</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Histórico de Vendas</h2>
+        <input type="month" id="filtro-mes">
+        <button onclick="filtrarHistorico()">Filtrar</button>
+        <div id="lista-historico"></div>
+    </main>
+    <script>
+        // Logout
+        document.getElementById('btn-sair').onclick = function() {
+            auth.signOut().then(() => window.location.href = "login.html");
+        };
+
+        function filtrarHistorico() {
+            const mes = document.getElementById('filtro-mes').value;
+            db.ref('pedidos').once('value').then(snapshot => {
+                let html = '<ul>';
+                snapshot.forEach(child => {
+                    const p = child.val();
+                    if (mes && !p.data.startsWith(mes)) return;
+                    html += `<li>Produto: ${p.produtoId} - Qtd: ${p.quantidade} - Data: ${p.data}</li>`;
+                });
+                html += '</ul>';
+                document.getElementById('lista-historico').innerHTML = html;
+            });
+        }
+        filtrarHistorico();
+    </script>
+</body>
+</html>

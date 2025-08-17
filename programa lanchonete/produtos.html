@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Produtos | Lanchonete</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="pedidos.html">Pedidos</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="estoque.html">Estoque</a>
+            <a href="caixa.html">Caixa</a>
+            <a href="historico.html">Histórico</a>
+            <button id="btn-sair">Sair</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Cadastro de Produtos</h2>
+        <form id="form-produto">
+            <input type="text" name="nome" placeholder="Nome do produto" required>
+            <input type="number" name="precoCompra" placeholder="Preço de compra" required>
+            <input type="number" name="quantidade" placeholder="Quantidade" required>
+            <button type="submit">Cadastrar Produto</button>
+        </form>
+        <div id="lista-produtos"></div>
+    </main>
+    <script>
+        // Logout
+        document.getElementById('btn-sair').onclick = function() {
+            auth.signOut().then(() => window.location.href = "login.html");
+        };
+
+        // Cadastro de produto
+        document.getElementById('form-produto').onsubmit = function(e) {
+            e.preventDefault();
+            const nome = this.nome.value;
+            const precoCompra = parseFloat(this.precoCompra.value);
+            const quantidade = parseInt(this.quantidade.value);
+            db.ref('produtos').push({ nome, precoCompra, quantidade });
+            this.reset();
+            carregarProdutos();
+        };
+
+        function carregarProdutos() {
+            db.ref('produtos').once('value').then(snapshot => {
+                let html = '<ul>';
+                snapshot.forEach(child => {
+                    const p = child.val();
+                    html += `<li>${p.nome} - R$${p.precoCompra} - Qtd: ${p.quantidade}</li>`;
+                });
+                html += '</ul>';
+                document.getElementById('lista-produtos').innerHTML = html;
+            });
+        }
+        carregarProdutos();
+    </script>
+</body>
+</html>

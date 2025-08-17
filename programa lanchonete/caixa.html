@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Caixa | Lanchonete</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="pedidos.html">Pedidos</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="estoque.html">Estoque</a>
+            <a href="caixa.html">Caixa</a>
+            <a href="historico.html">Histórico</a>
+            <button id="btn-sair">Sair</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Caixa</h2>
+        <div id="caixa-info"></div>
+    </main>
+    <script>
+        // Logout
+        document.getElementById('btn-sair').onclick = function() {
+            auth.signOut().then(() => window.location.href = "login.html");
+        };
+
+        // Faturamento e lucro
+        function calcularCaixa() {
+            let totalVendas = 0;
+            let totalGastos = 0;
+            db.ref('pedidos').once('value').then(snapshot => {
+                snapshot.forEach(child => {
+                    const p = child.val();
+                    totalVendas += p.quantidade; // Aqui você pode somar o valor do pedido se tiver preço
+                });
+                db.ref('produtos').once('value').then(snapshot2 => {
+                    snapshot2.forEach(child => {
+                        const prod = child.val();
+                        totalGastos += prod.precoCompra * prod.quantidade;
+                    });
+                    let lucro = totalVendas - totalGastos;
+                    document.getElementById('caixa-info').innerHTML =
+                        `<p>Vendas: R$${totalVendas}</p>
+                         <p>Gastos: R$${totalGastos}</p>
+                         <p>Lucro: R$${lucro}</p>`;
+                });
+            });
+        }
+        calcularCaixa();
+    </script>
+</body>
+</html>
