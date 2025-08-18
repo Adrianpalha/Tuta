@@ -3,7 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <title>Pedidos | Lanchonete</title>
-    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #a97c50;
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        header {
+            background: #6d4c27;
+            padding: 1rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        #btn-sair {
+            color: #ffe600;
+            font-weight: 700;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        #btn-sair:hover {
+            color: #43ea4c;
+        }
+        .pdv-main {
+            max-width: 1300px;
+            margin: 2rem auto;
+            background: #fff8f0;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #a97c5033, 0 2px 8px #a97c5022;
+            display: flex;
+            min-height: 600px;
+            overflow: hidden;
+        }
+        .pdv-left {
+            flex: 2.2;
+            background: #a97c50;
+            padding: 2rem 1.5rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .pdv-right {
+            flex: 1.3;
+            background: #f5e6d3;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid #6d4c27;
+        }
+        .pdv-categorias {
+            display: flex;
+            gap: 0.7rem;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .pdv-categorias button {
+            background: #fff8f0;
+            color: #6d4c27;
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem 1.3rem;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #a97c5022;
+            transition: background 0.2s, color 0.2s;
+        }
+        .pdv-categorias button.selected, .pdv-categorias button:hover {
+            background: #ffe600;
+            color: #a97c50;
+        }
+        .pdv-produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .pdv-produto-card {
+            background: #fff8f0;
+            border: 2px solid #a97c50;
+            border-radius: 10px;
+            padding: 0.7rem 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 0.2s, border 0.2s;
+            cursor: pointer;
+            color: #231f20;
+            min-height: 170px;
+        }
+        .pdv-produto-card.selected, .pdv-produto-card:hover {
+            border: 2.5px solid #ffe600;
+            box-shadow: 0 4px 16px #ffe60044;
+        }
+        .pdv-produto-img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+            background: #f5e6d3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pdv-produto-nome {
+            font-weight: 700;
+            color: #a97c50;
+            margin-bottom: 0.2rem;
+            text-align: center;
+            font-size: 1.05rem;
+        }
+        .pdv-produto-preco {
+            color: #43ea4c;
+            font-size: 1.1rem;
+            margin-bottom: 0.1rem;
+        }
+        .pdv-produto-estoque {
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 0.1rem;
+        }
+        .pdv-right label {
+            color: #a97c50;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            font-size: 1.1rem;
+        }
+        .pdv-codigo-qtd {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .pdv-codigo-qtd input[type="text"] {
+            width: 70px;
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: 1.5px solid #a97c50;
+            font-size: 1rem;
+            background: #fff;
+            color: #231f20;
+        }
+        .pdv-codigo-qtd input[type="text"]#pesquisa {
+            width: 220px;
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: 1.5px solid #a97c50;
+            font-size: 1rem;
+            background: #fff;
+            color: #231f20;
+            transition: width 0.2s;
+        }
+        .pdv-codigo-qtd input[type="number"] {
+            width: 60px;
+            padding: 0.4rem;
+            border-radius: 6px;
+            border: 1.5px solid #a97c50;
+            font-size: 1rem;
+            background: #fff;
+            color: #231f20;
+        }
+        .pdv-codigo-qtd button {
+            background: #ffe600;
+            color: #a97c50;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            cursor: pointer;
+        }
+        .pdv-pedido-lista {
+            background: #fff8f0;
+            border-radius: 8px;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            color: #231f20;
+            min-height: 80px;
+            box-shadow: 0 2px 8px #a97c5022;
+        }
+        .pdv-pedido-lista table {
+            width: 100%;
+            color: #231f20;
+            font-size: 1rem;
+        }
+        .pdv-pedido-lista th {
+            color: #a97c50;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-align: left;
+        }
+        .pdv-pedido-lista td {
+            padding: 0.2rem 0.3rem;
+        }
+        .pdv-valor-total {
+            font-size: 2rem;
+            color: #43ea4c;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: right;
+            background: #f5e6d3;
+            border-radius: 8px;
+            padding: 0.5rem 0.7rem;
+        }
+        .pdv-botoes {
+            display: flex;
+            gap: 1rem;
+        }
+        .pdv-botoes button {
+            flex: 1;
+            background: #a97c50;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.7rem 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .pdv-botoes button#btn-finalizar {
+            background: #43ea4c;
+            color: #231f20;
+        }
+        .pdv-botoes button:hover {
+            background: #ffe600;
+            color: #a97c50;
+            transform: scale(1.05);
+        }
+        @media (max-width: 1000px) {
+            .pdv-main { flex-direction: column; }
+            .pdv-right { border-left: none; border-top: 4px solid #a97c50; }
+        }
+        @media (max-width: 700px) {
+            .pdv-main { padding: 0.5rem; }
+            .pdv-left, .pdv-right { padding: 1rem; }
+            .pdv-produtos-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 500px) {
+            .pdv-produtos-grid { grid-template-columns: 1fr; }
+        }
+    </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
@@ -11,73 +255,313 @@
 </head>
 <body>
     <header>
-        <nav>
-            <a href="pedidos.html">Pedidos</a>
-            <a href="produtos.html">Produtos</a>
-            <a href="estoque.html">Estoque</a>
-            <a href="caixa.html">Caixa</a>
-            <a href="historico.html">Histórico</a>
-            <button id="btn-sair">Sair1</button>
-        </nav>
+        <button id="btn-sair">Sair</button>
     </header>
-    <main>
-        <h2>Registrar Pedido</h2>
-        <form id="form-pedido">
-            <select name="produto" required></select>
-            <input type="number" name="quantidade" placeholder="Quantidade" required>
-            <button type="submit">Registrar Pedido</button>
-        </form>
-        <div id="lista-pedidos"></div>
-    </main>
+    <div class="pdv-main">
+        <div class="pdv-left">
+            <div class="pdv-categorias" id="filtros-grupo"></div>
+            <div style="color:#fff8f0;font-weight:700;font-size:1.2rem;margin-bottom:0.7rem;">Escolha o Produto</div>
+            <div class="pdv-produtos-grid" id="produtos-grid"></div>
+        </div>
+        <div class="pdv-right">
+            <div class="pdv-codigo-qtd">
+                <label for="pesquisa">Pesquisar</label>
+                <input type="text" id="pesquisa" placeholder="Digite o nome do produto">
+                <label for="qtd">Qtde</label>
+                <input type="number" id="qtd" min="1" value="1">
+            </div>
+            <!-- Campo para nome do cliente -->
+            <div style="margin-bottom:1rem;">
+                <label for="nome-cliente">Nome do Cliente</label>
+                <input type="text" id="nome-cliente" placeholder="Opcional" style="width:100%;padding:0.4rem;border-radius:6px;border:1.5px solid #a97c50;font-size:1rem;">
+            </div>
+            <div style="margin-bottom:1rem;">
+                <label for="tipo-pagamento">Tipo de Pagamento</label>
+                <select id="tipo-pagamento" style="width:100%;padding:0.4rem;border-radius:6px;border:1.5px solid #a97c50;font-size:1rem;">
+                    <option value="dinheiro">Dinheiro</option>
+                    <option value="cartao">Cartão</option>
+                    <option value="pix">Pix</option>
+                </select>
+            </div>
+            <div class="pdv-pedido-lista" id="pedido-lista"></div>
+            <div class="pdv-valor-total" id="valor-total">Valor Total: R$ 0,00</div>
+            <div class="pdv-botoes">
+                <button id="btn-cancelar">Cancelar</button>
+                <button id="btn-finalizar">Receber e Finalizar</button>
+            </div>
+        </div>
+    </div>
     <script>
-        // Logout
+        // auth.onAuthStateChanged(user => {
+        //     if (!user) window.location.href = "login.html";
+        // });
+
         document.getElementById('btn-sair').onclick = function() {
-            auth.signOut().then(() => window.location.href = "login.html");
+            auth.signOut().then(() => window.location.href = "inicio.html");
         };
 
-        // Carregar produtos no select
-        function carregarProdutosSelect() {
+        // Categorias fixas solicitadas + opção TODOS
+        const categorias = [
+            { nome: "Todos", valor: "todos" },
+            { nome: "Pizza", valor: "Pizza" },
+            { nome: "Hambúrguer", valor: "Hambúrguer" },
+            { nome: "Sobremesa", valor: "Sobremesa" },
+            { nome: "Salgados", valor: "Salgados" },
+            { nome: "Bebidas", valor: "Bebidas" }
+        ];
+
+        let produtos = [];
+        let pedido = [];
+        let categoriaSelecionada = "todos";
+        let filtroPesquisa = "";
+
+        // Carregar categorias fixas
+        function carregarCategorias() {
+            let html = '';
+            categorias.forEach((cat, idx) => {
+                html += `<button class="${cat.valor === "todos" ? "selected" : ""}" data-grupo="${cat.valor}">${cat.nome}</button>`;
+            });
+            document.getElementById('filtros-grupo').innerHTML = html;
+            document.querySelectorAll('#filtros-grupo button').forEach(btn => {
+                btn.onclick = function() {
+                    document.querySelectorAll('#filtros-grupo button').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    categoriaSelecionada = this.getAttribute('data-grupo');
+                    filtroPesquisa = ""; // limpa filtro ao trocar categoria
+                    document.getElementById('pesquisa').value = "";
+                    carregarProdutosGrid(categoriaSelecionada, filtroPesquisa);
+                };
+            });
+        }
+
+        // Carregar produtos em grid (agora mostra todos se filtro vazio)
+        function carregarProdutosGrid(grupo, filtro = "") {
             db.ref('produtos').once('value').then(snapshot => {
+                produtos = [];
                 let html = '';
                 snapshot.forEach(child => {
                     const p = child.val();
-                    html += `<option value="${child.key}">${p.nome}</option>`;
+                    p.id = child.key;
+                    produtos.push(p);
                 });
-                document.querySelector('select[name="produto"]').innerHTML = html;
+                produtos.filter(p =>
+                    (grupo === "todos" || (p.grupo && p.grupo.toLowerCase() === grupo.toLowerCase())) &&
+                    (filtro === "" || (p.nome && p.nome.toLowerCase().includes(filtro)))
+                ).forEach(p => {
+                    html += `
+                        <div class="pdv-produto-card" data-id="${p.id}">
+                            <div class="pdv-produto-img">
+                                ${p.imagem ? `<img src="${p.imagem}" alt="${p.nome}" style="width:100%;height:100%;border-radius:50%;">` : `<svg width="40" height="40" fill="#a97c50" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><text x="12" y="17" text-anchor="middle" fill="#ffe600" font-size="12" font-family="Arial" dy=".3em">?</text></svg>`}
+                            </div>
+                            <div class="pdv-produto-nome">${p.nome}</div>
+                            <div class="pdv-produto-preco">
+                                R$ ${isNaN(Number(p.preco)) ? "0.00" : Number(p.preco).toFixed(2)}
+                            </div>
+                            <div class="pdv-produto-estoque">Estoque: ${p.quantidade}</div>
+                        </div>
+                    `;
+                });
+                document.getElementById('produtos-grid').innerHTML = html;
+
+                // Seleção de produto
+                document.querySelectorAll('.pdv-produto-card').forEach(card => {
+                    card.onclick = function() {
+                        document.querySelectorAll('.pdv-produto-card').forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                        const id = this.getAttribute('data-id');
+                        adicionarProdutoAoPedido(id);
+                    };
+                });
             });
         }
-        carregarProdutosSelect();
 
-        // Registrar pedido
-        document.getElementById('form-pedido').onsubmit = function(e) {
-            e.preventDefault();
-            const produtoId = this.produto.value;
-            const quantidade = parseInt(this.quantidade.value);
-            const data = new Date().toISOString();
-            db.ref('pedidos').push({ produtoId, quantidade, data });
-            this.reset();
-            carregarPedidos();
-            // Atualiza estoque
-            db.ref('produtos/' + produtoId).once('value').then(snapshot => {
-                const produto = snapshot.val();
-                db.ref('produtos/' + produtoId).update({
-                    quantidade: produto.quantidade - quantidade
+        // Filtro de pesquisa de produto (mostra todos se filtro vazio)
+        document.getElementById('pesquisa').addEventListener('input', function() {
+            filtroPesquisa = this.value.trim().toLowerCase();
+            carregarProdutosGrid(categoriaSelecionada, filtroPesquisa);
+        });
+
+        // Adicionar produto ao pedido
+        function adicionarProdutoAoPedido(produtoId) {
+            const produto = produtos.find(p => p.id === produtoId);
+            const qtd = parseInt(document.getElementById('qtd').value) || 1;
+            if (!produto || produto.quantidade < qtd) {
+                alert('Estoque insuficiente!');
+                return;
+            }
+            if (isNaN(Number(produto.preco))) {
+                alert('Produto sem preço cadastrado!');
+                return;
+            }
+            // Se já existe no pedido, soma a quantidade
+            const idx = pedido.findIndex(item => item.id === produtoId);
+            if (idx >= 0) {
+                if (pedido[idx].quantidade + qtd > produto.quantidade) {
+                    alert('Estoque insuficiente!');
+                    return;
+                }
+                pedido[idx].quantidade += qtd;
+            } else {
+                pedido.push({
+                    id: produtoId,
+                    nome: produto.nome,
+                    preco: produto.preco,
+                    quantidade: qtd
                 });
+            }
+            atualizarPedidoLista();
+        }
+
+        // Atualizar lista do pedido na tela
+        function atualizarPedidoLista() {
+            let html = `<table><tr><th>Produto</th><th>Qtde</th><th>Unitário</th><th>Total</th><th></th></tr>`;
+            let total = 0;
+            pedido.forEach((item, i) => {
+                const subtotal = item.quantidade * item.preco;
+                total += subtotal;
+                html += `<tr>
+                    <td>${item.nome}</td>
+                    <td>${item.quantidade}</td>
+                    <td>R$ ${Number(item.preco).toFixed(2)}</td>
+                    <td>R$ ${subtotal.toFixed(2)}</td>
+                    <td><button onclick="removerItemPedido(${i})" style="background:#a97c50;color:#fff;border:none;border-radius:6px;cursor:pointer;">X</button></td>
+                </tr>`;
+            });
+            html += `</table>`;
+            document.getElementById('pedido-lista').innerHTML = html;
+            document.getElementById('valor-total').innerText = `Valor Total: R$ ${total.toFixed(2)}`;
+        }
+
+        // Remover item do pedido
+        window.removerItemPedido = function(idx) {
+            pedido.splice(idx, 1);
+            atualizarPedidoLista();
+        };
+
+        // Cancelar pedido
+        document.getElementById('btn-cancelar').onclick = function() {
+            pedido = [];
+            atualizarPedidoLista();
+            document.querySelectorAll('.pdv-produto-card').forEach(c => c.classList.remove('selected'));
+        };
+
+        // Função para verificar se o caixa está aberto
+        function verificarCaixaAberto(callback) {
+            db.ref('caixa_aberto').once('value').then(snap => {
+                const aberto = snap.val();
+                callback(!!aberto);
+            });
+        }
+
+        // Bloqueia interface se caixa não estiver aberto
+        function bloquearPedidos() {
+            document.querySelectorAll('.pdv-produto-card, #btn-finalizar, #btn-cancelar, #qtd, #pesquisa, #tipo-pagamento, #nome-cliente').forEach(el => {
+                if (el) el.disabled = true;
+            });
+            document.getElementById('pedido-lista').innerHTML = '<div style="color:#a02020;font-weight:700;text-align:center;padding:2rem 0;">Abra o caixa na página de caixa para registrar pedidos.</div>';
+            document.getElementById('valor-total').innerText = '';
+        }
+
+        function desbloquearPedidos() {
+            document.querySelectorAll('#btn-finalizar, #btn-cancelar, #qtd, #pesquisa, #tipo-pagamento, #nome-cliente').forEach(el => {
+                if (el) el.disabled = false;
+            });
+            // Os cards de produto são recriados a cada filtro, então não precisa liberar aqui
+            atualizarPedidoLista();
+        }
+
+        // Ao carregar a página, verifica se o caixa está aberto
+        verificarCaixaAberto(function(aberto) {
+            if (!aberto) {
+                bloquearPedidos();
+            } else {
+                desbloquearPedidos();
+            }
+        });
+
+        // Ao tentar finalizar pedido, verifica novamente
+        document.getElementById('btn-finalizar').onclick = function() {
+            verificarCaixaAberto(function(aberto) {
+                if (!aberto) {
+                    bloquearPedidos();
+                    alert('Abra o caixa na página de caixa para registrar pedidos.');
+                    return;
+                }
+                if (pedido.length === 0) {
+                    alert('Adicione produtos ao pedido!');
+                    return;
+                }
+                // Verifica estoque novamente antes de registrar
+                let promises = pedido.map(item =>
+                    db.ref('produtos/' + item.id).once('value').then(snap => {
+                        const p = snap.val();
+                        if (!p || p.quantidade < item.quantidade) throw new Error('Estoque insuficiente para ' + item.nome);
+                    })
+                );
+                Promise.all(promises).then(() => {
+                    const data = new Date().toISOString();
+                    let valorTotal = pedido.reduce((sum, item) => sum + item.preco * item.quantidade, 0);
+                    let tipoPagamento = document.getElementById('tipo-pagamento').value;
+                    let cliente = document.getElementById('nome-cliente').value.trim();
+
+                    // 1. Registrar pedido
+                    db.ref('pedidos').push({
+                        itens: pedido.map(item => ({
+                            produtoId: item.id,
+                            produtoNome: item.nome,
+                            quantidade: item.quantidade,
+                            preco: item.preco
+                        })),
+                        valorTotal,
+                        tipoPagamento,
+                        cliente,
+                        data
+                    });
+
+                    // 2. Atualizar estoque
+                    pedido.forEach(item => {
+                        db.ref('produtos/' + item.id).once('value').then(snap => {
+                            const p = snap.val();
+                            db.ref('produtos/' + item.id).update({
+                                quantidade: p.quantidade - item.quantidade
+                            });
+                        });
+                    });
+
+                    // 3. Atualizar caixa
+                    db.ref('caixa').once('value').then(caixaSnap => {
+                        let saldo = caixaSnap.val() && caixaSnap.val().saldo ? caixaSnap.val().saldo : 0;
+                        saldo += valorTotal;
+                        db.ref('caixa').set({ saldo });
+                    });
+
+                    // 4. Registrar no histórico
+                    db.ref('historico').push({
+                        itens: pedido.map(item => ({
+                            produtoId: item.id,
+                            produtoNome: item.nome,
+                            quantidade: item.quantidade,
+                            preco: item.preco
+                        })),
+                        valorTotal,
+                        tipoPagamento,
+                        cliente,
+                        data
+                    });
+
+                    alert('Pedido registrado com sucesso!');
+                    pedido = [];
+                    atualizarPedidoLista();
+                    document.querySelectorAll('.pdv-produto-card').forEach(c => c.classList.remove('selected'));
+                    document.getElementById('nome-cliente').value = "";
+                }).catch(err => alert(err.message));
             });
         };
 
-        function carregarPedidos() {
-            db.ref('pedidos').once('value').then(snapshot => {
-                let html = '<ul>';
-                snapshot.forEach(child => {
-                    const p = child.val();
-                    html += `<li>Produto: ${p.produtoId} - Qtd: ${p.quantidade} - Data: ${p.data}</li>`;
-                });
-                html += '</ul>';
-                document.getElementById('lista-pedidos').innerHTML = html;
-            });
-        }
-        carregarPedidos();
+        // Inicialização
+        carregarCategorias();
+        carregarProdutosGrid(categoriaSelecionada);
+        atualizarPedidoLista();
     </script>
 </body>
 </html>

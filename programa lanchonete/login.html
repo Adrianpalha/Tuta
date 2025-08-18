@@ -21,11 +21,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: -2.0rem;      /* Valor original */
-            margin-bottom: -6.0rem;   /* Valor original */
+            margin-top: -2.0rem;
+            margin-bottom: -6.0rem;
         }
         .logo-tuta img {
-            width: 400px;            /* Valor original */
+            width: 400px;
             max-width: 90vw;
             height: auto;
             margin-bottom: 0.7rem;
@@ -36,18 +36,18 @@
         }
         .login-box {
             background: #fff;
-            padding: 2.2rem 2rem 2rem 2rem; /* Valor original */
+            padding: 2.2rem 2rem 2rem 2rem;
             border-radius: 24px;
             box-shadow: 0 8px 32px #43ea4c33, 0 2px 8px #a020f022;
             text-align: center;
-            max-width: 370px;        /* Valor original */
+            max-width: 370px;
             width: 100%;
             position: relative;
             margin-bottom: 2rem;
             margin-top: 0;
         }
         .input-group {
-            background: #ffe5b4;
+            background: #fff;
             border-radius: 12px;
             padding: 1rem 1.2rem;
             margin-bottom: 1rem;
@@ -59,38 +59,53 @@
             display: flex;
             align-items: center;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 0.5rem;
-            padding: 0.5rem 1rem;
-            border: 1px solid #a020f0;
+            padding: 0.7rem 1.2rem;
+            border: 2px solid #a020f0;
+            box-shadow: 0 2px 8px #ffe60044;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .input-icon:focus-within {
+            border-color: #43ea4c;
+            box-shadow: 0 0 0 3px #43ea4c33;
         }
         .input-icon svg {
             margin-right: 0.7rem;
             color: #43ea4c;
+            transition: color 0.2s;
+        }
+        .input-icon:focus-within svg {
+            color: #ffe600;
         }
         .input-icon input {
             border: none;
             background: transparent;
-            font-size: 1rem;
+            font-size: 1.08rem;
             flex: 1;
             outline: none;
             color: #231f20;
+            font-weight: 500;
+            letter-spacing: 0.03em;
         }
         .input-icon input::placeholder {
             color: #a020f0;
             opacity: 0.7;
+            font-weight: 400;
         }
-        .forgot-link {
+        .info-link {
             text-align: right;
             font-size: 0.95rem;
             color: #a020f0;
             margin-bottom: 1rem;
-            cursor: pointer;
+            cursor: default;
+            user-select: none;
         }
         .btn-login {
             width: 100%;
             padding: 0.95rem;
             background: linear-gradient(90deg, #43ea4c 60%, #a020f0 100%);
+            background-size: 200% 100%;
             color: #fff;
             border: none;
             border-radius: 24px;
@@ -99,11 +114,11 @@
             cursor: pointer;
             margin-bottom: 1.2rem;
             box-shadow: 0 2px 8px #43ea4c22;
-            transition: background 0.2s, box-shadow 0.2s;
+            transition: background-position 0.4s, transform 0.15s;
         }
         .btn-login:hover {
-            background: linear-gradient(90deg, #a020f0 60%, #43ea4c 100%);
-            box-shadow: 0 4px 16px #43ea4c;
+            background-position: 100% 0;
+            transform: scale(1.05);
         }
         .cadastro-link {
             color: #43ea4c;
@@ -124,19 +139,12 @@
             cursor: pointer;
             margin-bottom: 0.7rem;
             box-shadow: 0 2px 8px #a020f022;
-            transition: background 0.2s, box-shadow 0.2s;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
         }
         .btn-cadastro:hover {
             background: #43ea4c;
-        }
-        .btn-sem-cadastro {
-            background: none;
-            border: none;
-            color: #a020f0;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: underline;
+            transform: scale(1.05);
+            box-shadow: 0 6px 24px #a020f044;
         }
         #mensagem .alert {
             color: #fff;
@@ -147,13 +155,56 @@
             font-size: 1rem;
             box-shadow: 0 2px 8px #1e7c2c22;
         }
-        /* @media (max-width: 500px) {
-            .login-box {
-                padding: 1.2rem;
-                max-width: 98vw;
-            }
-            /* .logo-tuta img { width: 95vw; }
-         */
+@media (max-width: 900px) {
+    .logo-tuta img {
+        width: 260px;
+        max-width: 70vw;
+    }
+    .login-box {
+        max-width: 340px;
+        padding: 1.5rem 1rem 1.2rem 1rem;
+    }
+}
+@media (max-width: 600px) {
+    body {
+        padding: 0 0.5rem;
+    }
+    .logo-tuta {
+        margin-top: 0;
+        margin-bottom: -2.5rem;
+    }
+    .logo-tuta img {
+        width: 180px;
+        max-width: 90vw;
+    }
+    .login-box {
+        max-width: 98vw;
+        padding: 1.1rem 0.5rem 1rem 0.5rem;
+        border-radius: 14px;
+        margin-bottom: 1.2rem;
+    }
+    .input-group {
+        padding: 0.7rem 0.5rem;
+        border-radius: 8px;
+    }
+    .input-icon {
+        padding: 0.5rem 0.7rem;
+        border-radius: 8px;
+    }
+    .btn-login, .btn-cadastro {
+        font-size: 1rem;
+        padding: 0.7rem;
+        border-radius: 16px;
+    }
+}
+@media (max-width: 400px) {
+    .logo-tuta img {
+        width: 120px;
+    }
+    .login-box {
+        padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+    }
+}
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -178,7 +229,7 @@
                     <input type="password" name="senha" placeholder="Senha" required>
                 </div>
             </div>
-            <div class="forgot-link" onclick="alert('Função de recuperação não implementada!')">Esqueci minha senha</div>
+            <div class="info-link">Bem-vindo! Faça login para acessar o sistema.</div>
             <button type="submit" class="btn-login">ENTRAR</button>
         </form>
         <div id="mensagem"></div>
@@ -199,8 +250,9 @@
             </div>
             <button type="submit" class="btn-cadastro">Cadastrar</button>
         </form>
-        <button class="btn-sem-cadastro" onclick="window.location.href='pedidos.html'">Entrar sem Cadastro</button>
     </div>
+    <button id="btn-imprimir-comanda" style="display:none;">Imprimir Comanda</button>
+    <div id="comanda-impressao" style="display:none;"></div>
     <script>
         function mostrarMensagem(msg, tipo) {
             const div = document.getElementById('mensagem');
@@ -212,7 +264,9 @@
             const email = this.email.value;
             const senha = this.senha.value;
             auth.signInWithEmailAndPassword(email, senha)
-                .then(() => window.location.href = "pedidos.html")
+                .then(() => {
+                    window.location.href = "inicio.html";
+                })
                 .catch(error => mostrarMensagem(error.message, 'erro'));
         };
         function mostrarCadastro() {
@@ -223,6 +277,7 @@
             e.preventDefault();
             const email = this.email.value;
             const senha = this.senha.value;
+            // Cadastro simples, sem tipo de usuário
             auth.createUserWithEmailAndPassword(email, senha)
                 .then(() => {
                     mostrarMensagem('Cadastro realizado! Faça login.', 'sucesso');
@@ -231,6 +286,76 @@
                 })
                 .catch(error => mostrarMensagem(error.message, 'erro'));
         };
+        document.getElementById('btn-finalizar').onclick = function() {
+    if (pedido.length === 0) {
+        alert('Adicione produtos ao pedido!');
+        return;
+    }
+    // Verifica estoque novamente antes de registrar
+    let promises = pedido.map(item =>
+        db.ref('produtos/' + item.id).once('value').then(snap => {
+            const p = snap.val();
+            if (!p || p.quantidade < item.quantidade) throw new Error('Estoque insuficiente para ' + item.nome);
+        })
+    );
+    Promise.all(promises).then(() => {
+        const data = new Date().toISOString();
+        let valorTotal = pedido.reduce((sum, item) => sum + item.preco * item.quantidade, 0);
+        let tipoPagamento = document.getElementById('tipo-pagamento').value;
+        let cliente = document.getElementById('nome-cliente').value.trim();
+
+        // 1. Registrar pedido
+        db.ref('pedidos').push({
+            itens: pedido.map(item => ({
+                produtoId: item.id,
+                produtoNome: item.nome,
+                quantidade: item.quantidade,
+                preco: item.preco
+            })),
+            valorTotal,
+            tipoPagamento,
+            cliente,
+            data
+        });
+
+        // 2. Atualizar estoque
+        pedido.forEach(item => {
+            db.ref('produtos/' + item.id).once('value').then(snap => {
+                const p = snap.val();
+                db.ref('produtos/' + item.id).update({
+                    quantidade: p.quantidade - item.quantidade
+                });
+            });
+        });
+
+        // 3. Atualizar caixa
+        db.ref('caixa').once('value').then(caixaSnap => {
+            let saldo = caixaSnap.val() && caixaSnap.val().saldo ? caixaSnap.val().saldo : 0;
+            saldo += valorTotal;
+            db.ref('caixa').set({ saldo });
+        });
+
+        // 4. Registrar no histórico
+        db.ref('historico').push({
+            itens: pedido.map(item => ({
+                produtoId: item.id,
+                produtoNome: item.nome,
+                quantidade: item.quantidade,
+                preco: item.preco
+            })),
+            valorTotal,
+            tipoPagamento,
+            cliente,
+            data
+        });
+
+        alert('Pedido registrado com sucesso!');
+        pedido = [];
+        atualizarPedidoLista();
+        document.querySelectorAll('.pdv-produto-card').forEach(c => c.classList.remove('selected'));
+        document.getElementById('nome-cliente').value = "";
+    }).catch(err => alert(err.message));
+};
     </script>
 </body>
 </html>
