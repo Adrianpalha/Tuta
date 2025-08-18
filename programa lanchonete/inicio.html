@@ -2,7 +2,8 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Início | Lanchonete</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | Tuta Lanches</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -61,6 +62,60 @@
         }
         #btn-sair:hover {
             color: #43ea4c;
+        }
+        /* Já está no seu CSS, mas pode ser melhorado assim: */
+        @media (max-width: 900px) {
+            .logo-tuta img {
+                width: 200px;
+                max-width: 70vw;
+            }
+            .login-box {
+                max-width: 340px;
+                padding: 1.5rem 1rem 1.2rem 1rem;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 0 0.5rem;
+            }
+            .logo-tuta {
+                margin-top: 0;
+                margin-bottom: -2.5rem;
+            }
+            .logo-tuta img {
+                width: 120px;
+                max-width: 90vw;
+            }
+            .login-box {
+                max-width: 98vw;
+                padding: 1.1rem 0.5rem 1rem 0.5rem;
+                border-radius: 14px;
+                margin-bottom: 1.2rem;
+            }
+            .input-group {
+                padding: 0.7rem 0.5rem;
+                border-radius: 8px;
+            }
+            .input-icon {
+                padding: 0.5rem 0.7rem;
+                border-radius: 8px;
+            }
+            .btn-login, .btn-cadastro {
+                font-size: 1rem;
+                padding: 0.7rem;
+                border-radius: 16px;
+            }
+            .info-link {
+                font-size: 0.9rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .logo-tuta img {
+                width: 80px;
+            }
+            .login-box {
+                padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+            }
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
