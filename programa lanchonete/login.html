@@ -155,6 +155,36 @@
             font-size: 1rem;
             box-shadow: 0 2px 8px #1e7c2c22;
         }
+        .select-tipo {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 12px;
+            border: 2px solid #a020f0;
+            font-size: 1.08rem;
+            margin-bottom: 1rem;
+            background: #fff;
+            color: #231f20;
+            font-weight: 500;
+        }
+        .btn-voltar {
+            width: 100%;
+            padding: 0.7rem;
+            background: #ffe600;
+            color: #a97c50;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 0.7rem;
+            box-shadow: 0 2px 8px #ffe60044;
+            transition: background 0.2s, color 0.2s, transform 0.15s;
+        }
+        .btn-voltar:hover {
+            background: #43ea4c;
+            color: #231f20;
+            transform: scale(1.05);
+        }
 @media (max-width: 900px) {
     .logo-tuta img {
         width: 260px;
@@ -229,15 +259,15 @@
                     <input type="password" name="senha" placeholder="Senha" required>
                 </div>
             </div>
-            <div class="info-link">Bem-vindo! Faça login para acessar o sistema.</div>
+            <div class="info-link" id="info-link-login">Bem-vindo! Faça login para acessar o sistema.</div>
             <button type="submit" class="btn-login">ENTRAR</button>
         </form>
         <div id="mensagem"></div>
-        <div style="margin-bottom:1.2rem;">
+        <div id="cadastro-area" style="margin-bottom:1.2rem;">
             <span>Não possui conta?</span>
             <span class="cadastro-link" onclick="mostrarCadastro()">CADASTRA-SE</span>
         </div>
-        <form id="form-cadastro" style="display:none;">
+        <form id="form-cadastro" style="display:none; flex-direction:column;">
             <div class="input-group">
                 <div class="input-icon">
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 8-4 8-4s8 0 8 4"/></svg>
@@ -247,8 +277,14 @@
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="8" rx="2"/><path d="M12 14v2"/><path d="M8 10V8a4 4 0 1 1 8 0v2"/></svg>
                     <input type="password" name="senha" placeholder="Senha" required>
                 </div>
+                <select name="tipo" class="select-tipo" required>
+                    <option value="" disabled selected>Selecione o tipo de usuário</option>
+                    <option value="dono">Dono</option>
+                    <option value="funcionario">Funcionário</option>
+                </select>
             </div>
             <button type="submit" class="btn-cadastro">Cadastrar</button>
+            <button type="button" class="btn-voltar" onclick="voltarLogin()">Voltar</button>
         </form>
     </div>
     <button id="btn-imprimir-comanda" style="display:none;">Imprimir Comanda</button>
@@ -271,91 +307,39 @@
         };
         function mostrarCadastro() {
             document.getElementById('form-login').style.display = 'none';
+            document.getElementById('cadastro-area').style.display = 'none';
             document.getElementById('form-cadastro').style.display = 'flex';
+            document.getElementById('info-link-login').style.display = 'none';
+        }
+        function voltarLogin() {
+            document.getElementById('form-cadastro').reset();
+            document.getElementById('form-cadastro').style.display = 'none';
+            document.getElementById('form-login').style.display = 'block';
+            document.getElementById('cadastro-area').style.display = 'block';
+            document.getElementById('info-link-login').style.display = 'block';
         }
         document.getElementById('form-cadastro').onsubmit = function(e) {
             e.preventDefault();
             const email = this.email.value;
             const senha = this.senha.value;
-            // Cadastro simples, sem tipo de usuário
+            const tipo = this.tipo.value;
+            if (!tipo) {
+                mostrarMensagem('Selecione o tipo de usuário!', 'erro');
+                return;
+            }
             auth.createUserWithEmailAndPassword(email, senha)
-                .then(() => {
+                .then(userCredential => {
+                    // Salva o tipo de usuário no banco
+                    const uid = userCredential.user.uid;
+                    firebase.database().ref('usuarios/' + uid).set({
+                        email,
+                        tipo
+                    });
                     mostrarMensagem('Cadastro realizado! Faça login.', 'sucesso');
-                    document.getElementById('form-cadastro').style.display = 'none';
-                    document.getElementById('form-login').style.display = 'flex';
+                    voltarLogin();
                 })
                 .catch(error => mostrarMensagem(error.message, 'erro'));
         };
-        document.getElementById('btn-finalizar').onclick = function() {
-    if (pedido.length === 0) {
-        alert('Adicione produtos ao pedido!');
-        return;
-    }
-    // Verifica estoque novamente antes de registrar
-    let promises = pedido.map(item =>
-        db.ref('produtos/' + item.id).once('value').then(snap => {
-            const p = snap.val();
-            if (!p || p.quantidade < item.quantidade) throw new Error('Estoque insuficiente para ' + item.nome);
-        })
-    );
-    Promise.all(promises).then(() => {
-        const data = new Date().toISOString();
-        let valorTotal = pedido.reduce((sum, item) => sum + item.preco * item.quantidade, 0);
-        let tipoPagamento = document.getElementById('tipo-pagamento').value;
-        let cliente = document.getElementById('nome-cliente').value.trim();
-
-        // 1. Registrar pedido
-        db.ref('pedidos').push({
-            itens: pedido.map(item => ({
-                produtoId: item.id,
-                produtoNome: item.nome,
-                quantidade: item.quantidade,
-                preco: item.preco
-            })),
-            valorTotal,
-            tipoPagamento,
-            cliente,
-            data
-        });
-
-        // 2. Atualizar estoque
-        pedido.forEach(item => {
-            db.ref('produtos/' + item.id).once('value').then(snap => {
-                const p = snap.val();
-                db.ref('produtos/' + item.id).update({
-                    quantidade: p.quantidade - item.quantidade
-                });
-            });
-        });
-
-        // 3. Atualizar caixa
-        db.ref('caixa').once('value').then(caixaSnap => {
-            let saldo = caixaSnap.val() && caixaSnap.val().saldo ? caixaSnap.val().saldo : 0;
-            saldo += valorTotal;
-            db.ref('caixa').set({ saldo });
-        });
-
-        // 4. Registrar no histórico
-        db.ref('historico').push({
-            itens: pedido.map(item => ({
-                produtoId: item.id,
-                produtoNome: item.nome,
-                quantidade: item.quantidade,
-                preco: item.preco
-            })),
-            valorTotal,
-            tipoPagamento,
-            cliente,
-            data
-        });
-
-        alert('Pedido registrado com sucesso!');
-        pedido = [];
-        atualizarPedidoLista();
-        document.querySelectorAll('.pdv-produto-card').forEach(c => c.classList.remove('selected'));
-        document.getElementById('nome-cliente').value = "";
-    }).catch(err => alert(err.message));
-};
     </script>
 </body>
 </html>
