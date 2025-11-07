@@ -1,0 +1,2095 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Peça seus lanches favoritos com entrega rápida no Tuta Lanches!">
+    <meta name="theme-color" content="#00a868">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tuta Delivery">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/img/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/icon-192x192.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icon-72x72.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icon-72x72.png">
+    
+    <title>Tuta Lanches - Delivery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            background: #00a868;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        header h1 {
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 10px;
+            color: #ffffff;
+        }
+
+        header p {
+            display: none;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 0;
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 80px;
+            z-index: 99;
+        }
+
+        .top-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .top-nav-item:hover {
+            background: #f8f8f8;
+        }
+
+        .top-nav-item.active {
+            color: #00a868;
+        }
+
+        .top-nav-icon {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+
+        .top-nav-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .top-nav-item.active .top-nav-label {
+            color: #00a868;
+        }
+
+        .search-bar {
+            padding: 15px 20px;
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            display: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f8f8;
+            color: #333;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #00a868;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 168, 104, 0.1);
+        }
+
+        .categories-nav {
+            display: none;
+            gap: 10px;
+            padding: 15px 20px;
+            overflow-x: auto;
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            scrollbar-width: none;
+        }
+
+        .categories-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 2px solid #00a868;
+            background: #ffffff;
+            color: #00a868;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-btn:hover {
+            border-color: #00c878;
+            background: rgba(0, 168, 104, 0.15);
+            color: #00a868;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 168, 104, 0.4);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #00a868 0%, #00c878 100%);
+            color: #ffffff;
+            border-color: #00c878;
+            box-shadow: 0 4px 25px rgba(0, 168, 104, 0.7);
+            font-weight: 700;
+            transform: translateY(-2px);
+        }
+
+        .menu-section {
+            padding: 20px;
+            background: transparent;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-radius: 12px;
+            border: 2px solid #00a868;
+        }
+
+        .section-icon {
+            font-size: 32px;
+            filter: drop-shadow(0 2px 10px rgba(0, 168, 104, 0.7));
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #00a868;
+            font-weight: 700;
+            flex: 1;
+            text-shadow: 0 2px 10px rgba(0, 168, 104, 0.3);
+        }
+
+        .section-count {
+            background: linear-gradient(135deg, #00a868 0%, #00c878 100%);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 2px solid #00c878;
+            box-shadow: 0 0 15px rgba(0, 168, 104, 0.6);
+        }
+
+        .product-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+
+        .product-card:active {
+            transform: scale(0.98);
+        }
+
+        .product-card-top {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            background: #f0f0f0;
+            flex-shrink: 0;
+            border-radius: 8px;
+        }
+
+        .product-image::after {
+            content: none;
+        }
+
+        .product-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 0;
+        }
+
+        .product-header {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00a868;
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 168, 104, 0.08);
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 2px solid #00a868;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #00a868;
+            background: linear-gradient(135deg, #00a868 0%, #00c878 100%);
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(139, 69, 139, 0.5);
+        }
+
+        .quantity-btn:active {
+            transform: scale(0.9);
+            background: #A569BD;
+            color: #fff;
+            border-color: #A569BD;
+            box-shadow: 0 0 25px rgba(165, 105, 189, 0.7);
+        }
+
+        .quantity-display {
+            font-size: 14px;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+            color: #000;
+        }
+
+        .add-to-cart-btn {
+            background: #00a868;
+            color: #ffffff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .add-to-cart-btn:active {
+            transform: scale(0.95);
+            background: #6a3569;
+        }
+
+        .cart-float {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00a868;
+            color: #ffffff;
+            padding: 18px 40px;
+            border-radius: 30px;
+            box-shadow: 0 8px 40px rgba(0, 168, 104, 0.8);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+            min-width: 280px;
+            max-width: 90%;
+            transition: all 0.3s ease;
+            animation: bounceIn 0.5s ease;
+            border: 3px solid #A569BD;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translateX(-50%) scale(0); }
+            50% { transform: translateX(-50%) scale(1.1); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        .cart-float:active {
+            transform: translateX(-50%) scale(0.95);
+            box-shadow: 0 4px 20px rgba(139, 69, 139, 0.9);
+        }
+
+        .cart-icon {
+            font-size: 28px;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .cart-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .cart-items-count {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .cart-total {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: #ffffff;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 20px;
+            padding: 0;
+            position: relative;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 80px rgba(0, 168, 104, 0.5);
+            border: 3px solid #00a868;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #00a868 0%, #00c878 100%);
+            color: #ffffff;
+            padding: 25px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #00c878;
+            position: relative;
+        }
+
+        .modal-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 30%;
+            height: 3px;
+            background: #C39BD3;
+            animation: slideRight 2s ease-in-out infinite;
+        }
+
+        @keyframes slideRight {
+            0%, 100% { left: 0; width: 30%; }
+            50% { left: 70%; width: 30%; }
+        }
+
+        .modal-header h2 {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            color: #ffffff;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-body {
+            padding: 25px;
+            overflow-y: auto;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 2px solid #00a868;
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid #00a868;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #f5f5f5;
+            border: 2px solid #00a868;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #000000;
+        }
+
+        .cart-item-price {
+            color: #666666;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .remove-btn {
+            background: #ff4444;
+            color: #ffffff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid #cc0000;
+        }
+
+        .remove-btn:active {
+            transform: scale(0.95);
+        }
+
+        .order-form {
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 16px;
+            margin-top: 20px;
+            border: 2px solid #00a868;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #00a868;
+            font-size: 15px;
+            text-shadow: none;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #999999;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #00a868;
+            box-shadow: 0 0 0 3px rgba(0, 168, 104, 0.1);
+            background: #ffffff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .submit-order-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00a868 0%, #00c878 100%);
+            color: #ffffff;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(0, 168, 104, 0.7);
+            border: 2px solid #00c878;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-order-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .submit-order-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .submit-order-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(0, 168, 104, 0.8);
+        }
+
+        .submit-order-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .order-summary {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid #00a868;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #000000;
+        }
+
+        .summary-row.total {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00a868;
+            border-top: 2px solid #e0e0e0;
+            padding-top: 15px;
+            margin-top: 15px;
+            text-shadow: none;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999999;
+        }
+
+        .empty-cart-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-cart p {
+            font-size: 16px;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            font-size: 100px;
+            margin-bottom: 25px;
+            animation: successPop 0.5s ease;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-message h2 {
+            color: #00a868;
+            margin-bottom: 15px;
+            font-size: 24px;
+            text-shadow: none;
+        }
+
+        .success-message p {
+            color: #666666;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid #00a868;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                box-shadow: none;
+            }
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            .categories-nav {
+                padding: 12px 15px;
+            }
+
+            .category-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="img/Captura_de_tela_2025-11-06_123540-removebg-preview.png" alt="Logo">
+        </header>
+
+        <div class="top-nav">
+            <div class="top-nav-item active" onclick="showSection('cardapio')">
+                <div class="top-nav-icon">🍽️</div>
+                <div class="top-nav-label">CARDÁPIO</div>
+            </div>
+            <div class="top-nav-item" onclick="showSection('promocoes')">
+                <div class="top-nav-icon">💝</div>
+                <div class="top-nav-label">PROMOÇÕES</div>
+            </div>
+            <div class="top-nav-item" onclick="showSection('pedido')">
+                <div class="top-nav-icon">🛒</div>
+                <div class="top-nav-label">PEDIDO</div>
+            </div>
+        </div>
+
+        <div class="search-bar" id="searchBar">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar produtos..." oninput="searchProducts(this.value)">
+        </div>
+
+        <!-- Botão de Instalação PWA -->
+        <div id="installPrompt" style="display: none; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 400px;">
+            <div style="background: linear-gradient(135deg, #00a868 0%, #00c878 100%); color: white; padding: 20px; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,168,104,0.4); animation: slideUp 0.5s;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="font-size: 40px;">📱</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Instalar App</div>
+                        <div style="font-size: 13px; opacity: 0.9;">Adicione à tela inicial para acesso rápido!</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button onclick="installPWA()" style="flex: 1; background: white; color: #00a868; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">
+                        ✅ Instalar
+                    </button>
+                    <button onclick="dismissInstallPrompt()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                        ✕
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-nav" id="categoriesNav">
+            <button class="category-btn active" onclick="filterCategory('all')">
+                <span>🍽️</span> Todos
+            </button>
+            <button class="category-btn" onclick="filterCategory('lanches')">
+                <span>🍔</span> Lanches
+            </button>
+            <button class="category-btn" onclick="filterCategory('pizzas')">
+                <span>🍕</span> Pizzas
+            </button>
+            <button class="category-btn" onclick="filterCategory('bebidas')">
+                <span>🥤</span> Bebidas
+            </button>
+            <button class="category-btn" onclick="filterCategory('sobremesas')">
+                <span>🍰</span> Sobremesas
+            </button>
+        </div>
+
+        <div class="menu-section" id="menuSection">
+            <!-- Products will be rendered here -->
+        </div>
+    </div>
+
+    <div class="cart-float" id="cartFloat" onclick="openCart()" style="display: none;">
+        <div class="cart-icon">🛒</div>
+        <div class="cart-info">
+            <div class="cart-items-count" id="cartItemsCount">0 itens</div>
+            <div class="cart-total" id="cartTotal">R$ 0,00</div>
+        </div>
+    </div>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Seu Pedido</h2>
+                <button class="close-btn" onclick="closeCart()">&times;</button>
+            </div>
+            <div class="modal-body" id="cartModalBody">
+                <!-- Cart items will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Install Prompt & Service Worker Registration -->
+    <script>
+        // Variável para armazenar o evento de instalação
+        let deferredPrompt;
+        let isAppInstalled = false;
+
+        // Detecta se o app já está instalado
+        window.addEventListener('DOMContentLoaded', () => {
+            // Verifica se está rodando em modo standalone (já instalado)
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                isAppInstalled = true;
+                console.log('[PWA] App já instalado');
+            }
+        });
+
+        // Registra o Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('[PWA] Service Worker registrado:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('[PWA] Erro ao registrar Service Worker:', error);
+                    });
+            });
+        }
+
+        // Captura o evento de instalação
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('[PWA] Evento beforeinstallprompt disparado');
+            
+            // Previne o prompt automático
+            e.preventDefault();
+            
+            // Salva o evento para usar depois
+            deferredPrompt = e;
+            
+            // Mostra o botão de instalação (se não estiver instalado)
+            if (!isAppInstalled) {
+                showInstallPrompt();
+            }
+        });
+
+        // Mostra o prompt de instalação
+        function showInstallPrompt() {
+            const installPrompt = document.getElementById('installPrompt');
+            if (installPrompt) {
+                installPrompt.style.display = 'block';
+                
+                // Auto-esconde após 10 segundos
+                setTimeout(() => {
+                    if (installPrompt.style.display === 'block') {
+                        installPrompt.style.display = 'none';
+                    }
+                }, 10000);
+            }
+        }
+
+        // Função para instalar o PWA
+        window.installPWA = async function() {
+            if (!deferredPrompt) {
+                console.log('[PWA] Prompt de instalação não disponível');
+                return;
+            }
+
+            // Mostra o prompt de instalação
+            deferredPrompt.prompt();
+
+            // Aguarda a escolha do usuário
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            console.log(`[PWA] Usuário ${outcome === 'accepted' ? 'aceitou' : 'recusou'} a instalação`);
+
+            if (outcome === 'accepted') {
+                // Esconde o botão de instalação
+                document.getElementById('installPrompt').style.display = 'none';
+                isAppInstalled = true;
+            }
+
+            // Limpa o prompt
+            deferredPrompt = null;
+        }
+
+        // Função para dispensar o prompt
+        window.dismissInstallPrompt = function() {
+            document.getElementById('installPrompt').style.display = 'none';
+        }
+
+        // Detecta quando o app foi instalado com sucesso
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('[PWA] App instalado com sucesso!');
+            isAppInstalled = true;
+            
+            // Mostra mensagem de sucesso
+            alert('🎉 App instalado! Agora você pode acessar pela tela inicial.');
+        });
+
+        // Adiciona CSS para animação do prompt
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <!-- Firebase SDK v9 (modular) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getDatabase, ref, push, get, onValue, serverTimestamp, set } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js';
+        import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging.js';
+
+        // Sua configuração Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxokW1qooUb0RRU2IqdvZHvObuYSv9AL0",
+            authDomain: "tuta-lanches.firebaseapp.com",
+            databaseURL: "https://tuta-lanches-default-rtdb.firebaseio.com",
+            projectId: "tuta-lanches",
+            storageBucket: "tuta-lanches.firebasestorage.app",
+            messagingSenderId: "479951848",
+            appId: "1:479951848:web:262562993fcac563bdc25d",
+            measurementId: "G-0ZQMDSDYGJ"
+        };
+
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const messaging = getMessaging(app);
+
+        // CHAVE VAPID (Você precisa gerar no Firebase Console)
+        // Acesse: Firebase Console > Project Settings > Cloud Messaging > Web Push certificates
+        const VAPID_KEY = "BNhQ9QqvZ_YOUR_VAPID_KEY_HERE"; // SUBSTITUA pela sua chave VAPID
+
+        // Variável global para armazenar o token FCM
+        let fcmToken = null;
+
+        // Produtos do cardápio (CUSTOMIZE AQUI - SUBSTITUA AS IMAGENS PELAS SUAS)
+        const menuData = {
+            lanches: [
+                { id: 1, name: "X-Burger", description: "Hambúrguer, queijo, alface, tomate", price: 15.00, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" },
+                { id: 2, name: "X-Bacon", description: "Hambúrguer, queijo, bacon, alface, tomate", price: 18.00, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop" },
+                { id: 3, name: "X-Salada", description: "Hambúrguer, queijo, alface, tomate, milho", price: 16.00, image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&h=300&fit=crop" },
+            ],
+            pizzas: [
+                { id: 4, name: "Pizza Margherita", description: "Molho, mussarela, tomate, manjericão", price: 35.00, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop" },
+                { id: 5, name: "Pizza Calabresa", description: "Molho, mussarela, calabresa, cebola", price: 38.00, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop" },
+                { id: 6, name: "Pizza Portuguesa", description: "Molho, mussarela, presunto, ovo, cebola", price: 40.00, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" },
+            ],
+            bebidas: [
+                { id: 7, name: "Coca-Cola 2L", description: "Refrigerante", price: 10.00, image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop" },
+                { id: 8, name: "Guaraná 2L", description: "Refrigerante", price: 9.00, image: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=400&h=300&fit=crop" },
+                { id: 9, name: "Suco Natural", description: "Laranja, Limão ou Maracujá", price: 8.00, image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&h=300&fit=crop" },
+            ],
+            sobremesas: [
+                { id: 10, name: "Pudim", description: "Pudim de leite condensado", price: 12.00, image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop" },
+                { id: 11, name: "Brownie", description: "Brownie de chocolate", price: 10.00, image: "https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=400&h=300&fit=crop" },
+            ]
+        };
+
+        let cart = [];
+        let currentCategory = 'all';
+        let searchTerm = '';
+        let currentSection = 'cardapio';
+        let deliveryFee = 0;
+
+        const categoryInfo = {
+            lanches: { icon: '🍔', title: 'Lanches' },
+            pizzas: { icon: '🍕', title: 'Pizzas' },
+            bebidas: { icon: '🥤', title: 'Bebidas' },
+            sobremesas: { icon: '🍰', title: 'Sobremesas' }
+        };
+
+        // Função para atualizar a taxa de entrega
+        window.updateDeliveryFee = function() {
+            const deliveryOption = document.getElementById('deliveryOption');
+            if (!deliveryOption) {
+                console.error('Elemento deliveryOption não encontrado!');
+                return;
+            }
+            
+            if (deliveryOption.value === 'entrega') {
+                deliveryFee = 2.00;
+            } else {
+                deliveryFee = 0;
+            }
+            
+            console.log('Delivery option:', deliveryOption.value, 'Fee:', deliveryFee);
+            
+            updateCartDisplay();
+            updateOrderSummary();
+        }
+        
+        // Função para atualizar apenas o resumo do pedido
+        function updateOrderSummary() {
+            const orderSummary = document.querySelector('.order-summary');
+            if (!orderSummary) {
+                console.error('order-summary não encontrado!');
+                return;
+            }
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal + deliveryFee;
+            
+            console.log('Atualizando resumo - Subtotal:', subtotal, 'Fee:', deliveryFee, 'Total:', total);
+            
+            orderSummary.innerHTML = `
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>R$ ${subtotal.toFixed(2)}</span>
+                </div>
+                ${deliveryFee > 0 ? `
+                <div class="summary-row">
+                    <span>Taxa de Entrega:</span>
+                    <span>R$ ${deliveryFee.toFixed(2)}</span>
+                </div>
+                ` : ''}
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>R$ ${total.toFixed(2)}</span>
+                </div>
+            `;
+        }
+
+        // Alterna entre seções (Cardápio, Promoções, Carrinho)
+        window.showSection = function(section) {
+            currentSection = section;
+            
+            // Atualiza botões do top-nav
+            document.querySelectorAll('.top-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.top-nav-item').classList.add('active');
+
+            const menuSection = document.getElementById('menuSection');
+            const categoriesNav = document.getElementById('categoriesNav');
+            const searchBar = document.getElementById('searchBar');
+
+            if (section === 'cardapio') {
+                searchBar.style.display = 'block';
+                categoriesNav.style.display = 'flex';
+                renderProducts();
+            } else if (section === 'promocoes') {
+                searchBar.style.display = 'none';
+                categoriesNav.style.display = 'none';
+                menuSection.innerHTML = `
+                    <div style="padding: 40px 20px; text-align: center; color: #666;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">💝</div>
+                        <h2 style="color: #00a868; margin-bottom: 10px;">Promoções em breve!</h2>
+                        <p>Fique ligado nas nossas ofertas especiais</p>
+                    </div>
+                `;
+            } else if (section === 'pedido') {
+                searchBar.style.display = 'none';
+                categoriesNav.style.display = 'none';
+                renderPedidoSection();
+            }
+        }
+
+        // Renderiza seção de Pedido (Carrinho + Acompanhar)
+        function renderPedidoSection() {
+            const menuSection = document.getElementById('menuSection');
+            menuSection.innerHTML = `
+                <div style="padding: 20px;">
+                    <!-- Abas -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+                        <button onclick="showPedidoTab('carrinho')" id="tabCarrinho" 
+                            style="flex: 1; padding: 15px; background: #00a868; color: white; border: none; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer;">
+                            🛒 Meu Carrinho
+                        </button>
+                        <button onclick="showPedidoTab('acompanhar')" id="tabAcompanhar"
+                            style="flex: 1; padding: 15px; background: #f5f5f5; color: #666; border: none; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer;">
+                            📋 Acompanhar Pedido
+                        </button>
+                    </div>
+
+                    <!-- Conteúdo das Abas -->
+                    <div id="pedidoContent"></div>
+                </div>
+            `;
+            showPedidoTab('carrinho');
+        }
+
+        // Alterna entre abas de Pedido
+        window.showPedidoTab = function(tab) {
+            const tabCarrinho = document.getElementById('tabCarrinho');
+            const tabAcompanhar = document.getElementById('tabAcompanhar');
+            const content = document.getElementById('pedidoContent');
+
+            if (tab === 'carrinho') {
+                tabCarrinho.style.background = '#00a868';
+                tabCarrinho.style.color = 'white';
+                tabAcompanhar.style.background = '#f5f5f5';
+                tabAcompanhar.style.color = '#666';
+
+                if (cart.length === 0) {
+                    content.innerHTML = `
+                        <div style="padding: 60px 20px; text-align: center; color: #999;">
+                            <div style="font-size: 80px; margin-bottom: 20px;">🛒</div>
+                            <h3 style="color: #666; margin-bottom: 10px;">Seu carrinho está vazio</h3>
+                            <p>Adicione produtos para fazer seu pedido!</p>
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = `
+                        <div style="background: white; border-radius: 12px; padding: 20px;">
+                            <button onclick="openCart()" 
+                                style="width: 100%; background: linear-gradient(135deg, #00a868 0%, #00c878 100%); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer;">
+                                🛒 Ver Carrinho Completo (${cart.length} ${cart.length === 1 ? 'item' : 'itens'})
+                            </button>
+                        </div>
+                    `;
+                }
+            } else if (tab === 'acompanhar') {
+                tabCarrinho.style.background = '#f5f5f5';
+                tabCarrinho.style.color = '#666';
+                tabAcompanhar.style.background = '#00a868';
+                tabAcompanhar.style.color = 'white';
+
+                content.innerHTML = `
+                    <div id="buscaPedidoSection" style="background: white; border-radius: 12px; padding: 30px;">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <div style="font-size: 60px; margin-bottom: 15px;">📋</div>
+                            <h2 style="color: #00a868; margin-bottom: 10px; font-size: 24px;">Acompanhar Pedido</h2>
+                            <p style="color: #666;">Digite o código do seu pedido</p>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; color: #666; font-weight: 600; margin-bottom: 10px;">
+                                Código do Pedido
+                            </label>
+                            <input 
+                                type="text" 
+                                id="codigoPedidoInput" 
+                                placeholder="Ex: AB23FZ"
+                                style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; text-transform: uppercase;"
+                                maxlength="10"
+                                onkeypress="if(event.key === 'Enter') buscarPedidoPorCodigo()"
+                            >
+                        </div>
+
+                        <button 
+                            onclick="buscarPedidoPorCodigo()"
+                            style="width: 100%; background: linear-gradient(135deg, #00a868 0%, #00c878 100%); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
+                            🔍 Buscar Pedido
+                        </button>
+                    </div>
+
+                    <div id="resultadoPedido" style="margin-top: 20px; display: none;"></div>
+                `;
+            }
+        }
+
+        // Variável global para armazenar o listener ativo
+        let activeOrderListener = null;
+        let currentOrderKey = null;
+
+        // Controle de som de notificação
+        let somAtivado = localStorage.getItem('somNotificacao') !== 'false'; // Ativado por padrão
+        let ultimoStatus = null; // Para detectar mudanças de status
+
+        // Áudio de notificação (usando Web Audio API para criar som)
+        function tocarSomNotificacao() {
+            if (!somAtivado) return;
+
+            try {
+                // Cria contexto de áudio
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Toca dois bipes curtos
+                const beep = (frequency, startTime, duration) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = frequency;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, startTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                    
+                    oscillator.start(startTime);
+                    oscillator.stop(startTime + duration);
+                };
+
+                const now = audioContext.currentTime;
+                beep(800, now, 0.15); // Primeiro beep
+                beep(1000, now + 0.2, 0.15); // Segundo beep (mais agudo)
+
+            } catch (error) {
+                console.log('Erro ao tocar som:', error);
+            }
+        }
+
+        // Função para alternar som
+        window.toggleSound = function() {
+            somAtivado = !somAtivado;
+            localStorage.setItem('somNotificacao', somAtivado);
+            
+            // Atualiza o botão
+            const btn = document.getElementById('toggleSoundBtn');
+            if (btn) {
+                btn.style.background = somAtivado ? '#00a868' : '#e0e0e0';
+                btn.style.color = somAtivado ? 'white' : '#666';
+                btn.innerHTML = `
+                    <span style="font-size: 14px;">${somAtivado ? '🔔' : '🔕'}</span>
+                    <span>${somAtivado ? 'Som Ativado' : 'Som Desativado'}</span>
+                `;
+            }
+
+            // Toca som de teste se ativado
+            if (somAtivado) {
+                tocarSomNotificacao();
+            }
+        }
+
+        // Busca pedido por código
+        window.buscarPedidoPorCodigo = async function() {
+            const codigo = document.getElementById('codigoPedidoInput').value.trim().toUpperCase();
+            const resultado = document.getElementById('resultadoPedido');
+
+            if (!codigo) {
+                alert('Por favor, digite o código do pedido!');
+                return;
+            }
+
+            // Remove listener anterior se existir
+            if (activeOrderListener && currentOrderKey) {
+                activeOrderListener = null;
+                currentOrderKey = null;
+            }
+
+            resultado.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 40px; animation: pulse 1.5s infinite;">⏳</div>
+                    <p style="color: #666; margin-top: 10px;">Buscando pedido...</p>
+                </div>
+            `;
+
+            try {
+                const pedidosRef = ref(database, 'delivery_pedidos');
+                const snapshot = await get(pedidosRef);
+
+                if (snapshot.exists()) {
+                    const pedidos = snapshot.val();
+                    let pedidoKey = null;
+
+                    for (const [key, pedido] of Object.entries(pedidos)) {
+                        if (pedido.codigo === codigo) {
+                            pedidoKey = key;
+                            break;
+                        }
+                    }
+
+                    if (pedidoKey) {
+                        // Oculta a seção de busca
+                        document.getElementById('buscaPedidoSection').style.display = 'none';
+                        document.getElementById('resultadoPedido').style.display = 'block';
+
+                        // Solicita permissão para notificações e salva token
+                        await solicitarPermissaoNotificacao(pedidoKey);
+
+                        // Ativa monitoramento em tempo real do pedido específico
+                        currentOrderKey = pedidoKey;
+                        const orderRef = ref(database, `delivery_pedidos/${pedidoKey}`);
+                        
+                        activeOrderListener = onValue(orderRef, (snapshot) => {
+                            if (snapshot.exists()) {
+                                const pedidoEncontrado = snapshot.val();
+                                
+                                // Detecta mudança de status e toca som
+                                if (ultimoStatus && ultimoStatus !== pedidoEncontrado.status) {
+                                    tocarSomNotificacao();
+                                    
+                                    // Mostra notificação visual no navegador (se permitido)
+                                    if (Notification.permission === 'granted') {
+                                        new Notification('🔔 Pedido Atualizado!', {
+                                            body: `Seu pedido está: ${pedidoEncontrado.status}`,
+                                            icon: '/img/logo.png',
+                                            tag: 'status-change',
+                                            requireInteraction: false
+                                        });
+                                    }
+                                }
+                                
+                                ultimoStatus = pedidoEncontrado.status;
+                                renderOrderWithProgressBar(pedidoEncontrado, codigo);
+                            } else {
+                                resultado.innerHTML = `
+                                    <div style="background: #d4edda; border: 2px solid #c3e6cb; border-radius: 12px; padding: 30px; text-align: center;">
+                                        <div style="font-size: 80px; margin-bottom: 15px;">✅</div>
+                                        <h3 style="color: #155724; margin-bottom: 10px; font-size: 24px;">Pedido Entregue!</h3>
+                                        <p style="color: #155724; font-size: 16px;">Seu pedido foi concluído com sucesso.</p>
+                                        <button onclick="voltarBusca()" style="margin-top: 20px; background: #00a868; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                                            ← Buscar Outro Pedido
+                                        </button>
+                                    </div>
+                                `;
+                            }
+                        });
+                    } else {
+                        resultado.style.display = 'block';
+                        resultado.innerHTML = `
+                            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 20px; text-align: center; margin-top: 20px;">
+                                <div style="font-size: 50px; margin-bottom: 10px;">😕</div>
+                                <h3 style="color: #856404; margin-bottom: 10px;">Pedido não encontrado</h3>
+                                <p style="color: #856404;">O código <strong>${codigo}</strong> não foi encontrado.</p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    resultado.style.display = 'block';
+                    resultado.innerHTML = `
+                        <div style="background: #f8d7da; border: 2px solid #f5c6cb; border-radius: 12px; padding: 20px; text-align: center; margin-top: 20px;">
+                            <div style="font-size: 50px; margin-bottom: 10px;">📭</div>
+                            <p style="color: #721c24;">Nenhum pedido no sistema.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                resultado.style.display = 'block';
+                resultado.innerHTML = `
+                    <div style="background: #f8d7da; border: 2px solid #f5c6cb; border-radius: 12px; padding: 20px; text-align: center; margin-top: 20px;">
+                        <div style="font-size: 50px; margin-bottom: 10px;">⚠️</div>
+                        <p style="color: #721c24;">Erro ao buscar pedido.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Renderiza pedido com barra de progresso
+        function renderOrderWithProgressBar(pedidoEncontrado, codigo) {
+            const resultado = document.getElementById('resultadoPedido');
+            const status = pedidoEncontrado.status || 'Pendente';
+            
+            const statusEmojis = {
+                'Pendente': '🕓',
+                'Recebido': '✅',
+                'Em preparo': '🍔',
+                'Pronto': '🎉',
+                'Saiu para entrega': '�',
+                'Entregue': '✨'
+            };
+            const emoji = statusEmojis[status] || '📦';
+
+            resultado.innerHTML = `
+                <div style="background: white; border-radius: 12px; padding: 25px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 500px; margin-left: auto; margin-right: auto;">
+                    <!-- Cabeçalho com Código -->
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 70px; margin-bottom: 10px; animation: pulse 2s infinite;">${emoji}</div>
+                        <h3 style="color: #333; font-size: 18px; margin: 0 0 8px 0;">Pedido</h3>
+                        <div style="font-size: 28px; font-weight: 700; color: #00a868; letter-spacing: 3px; margin-bottom: 15px;">${codigo}</div>
+                        
+                        <!-- Indicador ao vivo + Controle de Som -->
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                            <div style="display: inline-flex; align-items: center; gap: 6px; background: #e8f5e9; padding: 6px 14px; border-radius: 20px;">
+                                <div style="width: 8px; height: 8px; background: #00a868; border-radius: 50%; animation: blink 1.5s infinite;"></div>
+                                <span style="color: #00a868; font-size: 12px; font-weight: 600;">Ao vivo</span>
+                            </div>
+                            
+                            <!-- Botão de Som -->
+                            <button id="toggleSoundBtn" onclick="toggleSound()" style="display: inline-flex; align-items: center; gap: 6px; background: ${somAtivado ? '#00a868' : '#e0e0e0'}; color: ${somAtivado ? 'white' : '#666'}; padding: 6px 14px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.3s;">
+                                <span style="font-size: 14px;">${somAtivado ? '🔔' : '🔕'}</span>
+                                <span>${somAtivado ? 'Som Ativado' : 'Som Desativado'}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Barra de progresso -->
+                    <div style="width: 100%; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; margin-bottom: 25px;">
+                        <div style="height: 100%; background: linear-gradient(90deg, #00a868 0%, #00c878 50%, #00a868 100%); animation: progressBar 2s linear infinite; background-size: 200% 100%;"></div>
+                    </div>
+
+                    <!-- Status Destacado -->
+                    <div style="background: linear-gradient(135deg, #00a868 0%, #00c878 100%); color: white; padding: 30px 20px; border-radius: 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,168,104,0.3); animation: fadeIn 0.5s;">
+                        <div style="font-size: 14px; opacity: 0.95; margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase;">Status do Pedido</div>
+                        <div style="font-size: 32px; font-weight: 700; line-height: 1.2;">${status}</div>
+                    </div>
+
+                    <!-- Botão Voltar -->
+                    <button onclick="voltarBusca()" style="width: 100%; background: white; border: 2px solid #00a868; color: #00a868; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span style="font-size: 20px;">←</span>
+                        <span>Buscar Outro Pedido</span>
+                    </button>
+
+                    <style>
+                        button:hover {
+                            background: #00a868 !important;
+                            color: white !important;
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(0,168,104,0.3);
+                        }
+                        
+                        #toggleSoundBtn:hover {
+                            transform: scale(1.05);
+                        }
+                        
+                        @keyframes fadeIn {
+                            from { opacity: 0; transform: scale(0.95); }
+                            to { opacity: 1; transform: scale(1); }
+                        }
+                        @keyframes pulse {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.08); }
+                        }
+                        @keyframes blink {
+                            0%, 100% { opacity: 1; }
+                            50% { opacity: 0.3; }
+                        }
+                        @keyframes progressBar {
+                            0% { background-position: 0% 0%; }
+                            100% { background-position: 200% 0%; }
+                        }
+                    </style>
+                </div>
+            `;
+        }
+
+        // ========== SISTEMA DE NOTIFICAÇÕES PUSH ==========
+        
+        // Solicita permissão para notificações e salva token
+        async function solicitarPermissaoNotificacao(pedidoKey) {
+            try {
+                // Verifica se o navegador suporta notificações
+                if (!('Notification' in window)) {
+                    console.log('Este navegador não suporta notificações');
+                    return;
+                }
+
+                // Solicita permissão ao usuário
+                const permission = await Notification.requestPermission();
+                
+                if (permission === 'granted') {
+                    console.log('Permissão de notificação concedida');
+                    
+                    // Obtém o token FCM
+                    try {
+                        const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+                        
+                        if (token) {
+                            console.log('Token FCM obtido:', token);
+                            fcmToken = token;
+                            
+                            // Salva o token no pedido para enviar notificações
+                            const tokenRef = ref(database, `delivery_pedidos/${pedidoKey}/fcmToken`);
+                            await set(tokenRef, token);
+                            
+                            console.log('Token salvo no pedido!');
+                        } else {
+                            console.log('Não foi possível obter o token FCM');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao obter token FCM:', error);
+                    }
+                } else {
+                    console.log('Permissão de notificação negada');
+                }
+            } catch (error) {
+                console.error('Erro ao solicitar permissão:', error);
+            }
+        }
+
+        // Recebe notificações quando o app está em primeiro plano
+        onMessage(messaging, (payload) => {
+            console.log('Mensagem recebida em primeiro plano:', payload);
+            
+            const notificationTitle = payload.notification.title;
+            const notificationOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon || '/img/logo.png',
+                badge: '/img/badge.png',
+                vibrate: [200, 100, 200],
+                tag: 'pedido-update',
+                requireInteraction: false
+            };
+
+            // Mostra notificação mesmo com app aberto
+            if (Notification.permission === 'granted') {
+                new Notification(notificationTitle, notificationOptions);
+            }
+        });
+
+        // Função para voltar à busca
+        window.voltarBusca = function() {
+            // Remove o listener ativo
+            if (activeOrderListener && currentOrderKey) {
+                activeOrderListener = null;
+                currentOrderKey = null;
+            }
+            
+            // Reseta o status anterior
+            ultimoStatus = null;
+            
+            // Mostra a seção de busca novamente
+            document.getElementById('buscaPedidoSection').style.display = 'block';
+            
+            // Oculta e limpa o resultado
+            const resultado = document.getElementById('resultadoPedido');
+            resultado.style.display = 'none';
+            resultado.innerHTML = '';
+            
+            // Limpa o input e dá foco
+            document.getElementById('codigoPedidoInput').value = '';
+            document.getElementById('codigoPedidoInput').focus();
+        }
+
+        // Renderiza produtos
+        function renderProducts() {
+            const menuSection = document.getElementById('menuSection');
+            menuSection.innerHTML = '';
+
+            const categoriesToShow = currentCategory === 'all' 
+                ? Object.keys(menuData) 
+                : [currentCategory];
+
+            categoriesToShow.forEach(category => {
+                const products = menuData[category];
+                const filteredProducts = searchTerm 
+                    ? products.filter(p => 
+                        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        p.description.toLowerCase().includes(searchTerm.toLowerCase())
+                      )
+                    : products;
+
+                if (filteredProducts.length > 0) {
+                    filteredProducts.forEach(product => {
+                        const productCard = createProductCard(product);
+                        menuSection.appendChild(productCard);
+                    });
+                }
+            });
+
+            if (menuSection.innerHTML === '') {
+                menuSection.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🔍</div>
+                        <p>Nenhum produto encontrado</p>
+                    </div>
+                `;
+            }
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-card-top">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-content">
+                        <div class="product-header">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-description">${product.description}</div>
+                            <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="decreaseQuantity(${product.id})">-</button>
+                        <span class="quantity-display" id="qty-${product.id}">1</span>
+                        <button class="quantity-btn" onclick="increaseQuantity(${product.id})">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                        Adicionar
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        window.filterCategory = function(category) {
+            currentCategory = category;
+            
+            // Atualiza botões ativos
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.category-btn').classList.add('active');
+            
+            renderProducts();
+        }
+
+        window.searchProducts = function(term) {
+            searchTerm = term;
+            renderProducts();
+        }
+
+        window.increaseQuantity = function(productId) {
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            let qty = parseInt(qtyElement.textContent);
+            qtyElement.textContent = ++qty;
+        }
+
+        window.decreaseQuantity = function(productId) {
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            let qty = parseInt(qtyElement.textContent);
+            if (qty > 1) {
+                qtyElement.textContent = --qty;
+            }
+        }
+
+        window.addToCart = function(productId) {
+            const product = findProductById(productId);
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(qtyElement.textContent);
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: quantity
+                });
+            }
+
+            qtyElement.textContent = "1";
+            updateCartDisplay();
+            showNotification(`${product.name} adicionado!`);
+        }
+
+        function findProductById(id) {
+            for (let category in menuData) {
+                const product = menuData[category].find(p => p.id === id);
+                if (product) return product;
+            }
+            return null;
+        }
+
+        function updateCartDisplay() {
+            const cartFloat = document.getElementById('cartFloat');
+            const cartItemsCount = document.getElementById('cartItemsCount');
+            const cartTotal = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                cartFloat.style.display = 'none';
+                return;
+            }
+
+            cartFloat.style.display = 'flex';
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + deliveryFee;
+
+            cartItemsCount.textContent = `${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`;
+            cartTotal.textContent = `R$ ${totalPrice.toFixed(2)}`;
+        }
+
+        window.openCart = function() {
+            const modal = document.getElementById('cartModal');
+            const modalBody = document.getElementById('cartModalBody');
+
+            if (cart.length === 0) {
+                modalBody.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <p>Seu carrinho está vazio</p>
+                    </div>
+                `;
+            } else {
+                modalBody.innerHTML = renderCartItems();
+                // Aguarda o DOM atualizar e depois sincroniza o resumo
+                setTimeout(() => {
+                    const deliveryOption = document.getElementById('deliveryOption');
+                    if (deliveryOption) {
+                        if (deliveryOption.value === 'entrega') {
+                            deliveryFee = 2.00;
+                        } else {
+                            deliveryFee = 0;
+                        }
+                        updateOrderSummary();
+                    }
+                }, 0);
+            }
+
+            modal.style.display = 'block';
+        }
+
+        window.closeCart = function() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function renderCartItems() {
+            // Salva o valor atual do deliveryOption se existir
+            const currentDeliveryOption = document.getElementById('deliveryOption') 
+                ? document.getElementById('deliveryOption').value 
+                : 'retirada';
+            const currentName = document.getElementById('customerName') 
+                ? document.getElementById('customerName').value 
+                : '';
+            const currentAddress = document.getElementById('customerAddress') 
+                ? document.getElementById('customerAddress').value 
+                : '';
+            const currentPayment = document.getElementById('paymentMethod') 
+                ? document.getElementById('paymentMethod').value 
+                : 'Dinheiro';
+            const currentObs = document.getElementById('observations') 
+                ? document.getElementById('observations').value 
+                : '';
+            
+            // Sincroniza a deliveryFee com a opção atual
+            if (currentDeliveryOption === 'entrega') {
+                deliveryFee = 2.00;
+            } else {
+                deliveryFee = 0;
+            }
+            
+            let html = '<div>';
+            
+            cart.forEach(item => {
+                html += `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">R$ ${item.price.toFixed(2)} x ${item.quantity}</div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="updateCartItemQuantity(${item.id}, -1)">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateCartItemQuantity(${item.id}, 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${item.id})">🗑️ Remover</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal + deliveryFee;
+
+            html += `
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>R$ ${subtotal.toFixed(2)}</span>
+                    </div>
+                    ${deliveryFee > 0 ? `
+                    <div class="summary-row">
+                        <span>Taxa de Entrega:</span>
+                        <span>R$ ${deliveryFee.toFixed(2)}</span>
+                    </div>
+                    ` : ''}
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span>R$ ${total.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="order-form">
+                    <div class="form-group">
+                        <label for="customerName">👤 Nome Completo</label>
+                        <input type="text" id="customerName" placeholder="Digite seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryOption">� Tipo de Pedido</label>
+                        <select id="deliveryOption" onchange="updateDeliveryFee()">
+                            <option value="retirada" ${currentDeliveryOption === 'retirada' ? 'selected' : ''}>🏪 Retirar na Lanchonete</option>
+                            <option value="entrega" ${currentDeliveryOption === 'entrega' ? 'selected' : ''}>🛵 Entrega (+R$ 2,00)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerAddress">📍 Endereço de Entrega</label>
+                        <textarea id="customerAddress" placeholder="Rua, número, bairro, complemento">${currentAddress}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentMethod">💳 Forma de Pagamento</label>
+                        <select id="paymentMethod">
+                            <option value="Dinheiro">💵 Dinheiro</option>
+                            <option value="Cartão de Débito">💳 Cartão de Débito</option>
+                            <option value="Cartão de Crédito">💳 Cartão de Crédito</option>
+                            <option value="PIX">📱 PIX</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="observations">📝 Observações (opcional)</label>
+                        <textarea id="observations" placeholder="Alguma observação sobre o pedido?"></textarea>
+                    </div>
+                    <button class="submit-order-btn" onclick="submitOrder()">
+                        🛒 Finalizar Pedido
+                    </button>
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>Enviando pedido...</p>
+                    </div>
+                </div>
+            `;
+
+            html += '</div>';
+            return html;
+        }
+
+        window.updateCartItemQuantity = function(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartDisplay();
+                    updateOrderSummary();
+                }
+            }
+        }
+
+        window.removeFromCart = function(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartDisplay();
+            if (cart.length > 0) {
+                updateOrderSummary();
+            } else {
+                openCart();
+            }
+        }
+
+        window.submitOrder = async function() {
+            const name = document.getElementById('customerName').value.trim();
+            const deliveryOption = document.getElementById('deliveryOption').value;
+            const address = document.getElementById('customerAddress').value.trim();
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const observations = document.getElementById('observations').value.trim();
+
+            if (!name) {
+                alert('Por favor, preencha seu nome!');
+                return;
+            }
+
+            if (deliveryOption === 'entrega' && !address) {
+                alert('Por favor, preencha o endereço de entrega!');
+                return;
+            }
+
+            const submitBtn = document.querySelector('.submit-order-btn');
+            const loading = document.getElementById('loading');
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal + deliveryFee;
+
+            // Gera código único do pedido (6 caracteres alfanuméricos)
+            const generateOrderCode = () => {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let code = '';
+                for (let i = 0; i < 6; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return code;
+            };
+            const orderCode = generateOrderCode();
+
+            const order = {
+                codigo: orderCode,
+                customer: {
+                    name: name,
+                    deliveryType: deliveryOption === 'entrega' ? 'Entrega' : 'Retirada',
+                    address: deliveryOption === 'entrega' ? address : 'Retirada na lanchonete'
+                },
+                items: cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    subtotal: item.price * item.quantity
+                })),
+                payment: {
+                    method: paymentMethod,
+                    subtotal: subtotal,
+                    deliveryFee: deliveryFee,
+                    total: total
+                },
+                observations: observations,
+                status: 'Pendente',
+                timestamp: serverTimestamp(),
+                date: new Date().toLocaleString('pt-BR')
+            };
+
+            try {
+                // Salva no Firebase no nó delivery_pedidos
+                const pedidosRef = ref(database, 'delivery_pedidos');
+                await push(pedidosRef, order);
+                
+                // Limpa o carrinho
+                cart = [];
+                updateCartDisplay();
+
+                // Mostra mensagem de sucesso
+                document.getElementById('cartModalBody').innerHTML = `
+                    <div class="success-message">
+                        <div class="success-icon">✅</div>
+                        <h2>Pedido Enviado!</h2>
+                        <p>Seu pedido foi recebido com sucesso.</p>
+                        <p style="background: #fffbeb; padding: 15px; border-radius: 8px; border: 2px solid #00a868; margin: 20px 0;">
+                            <strong style="font-size: 14px; color: #666;">Código do pedido:</strong><br>
+                            <strong style="font-size: 28px; color: #00a868; letter-spacing: 3px;" id="orderCodeText">${orderCode}</strong>
+                        </p>
+                        <button style="background: #00a868; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; margin: 10px 0; width: 100%; font-weight: 600;" onclick="copyOrderCode('${orderCode}')">
+                            📋 Copiar Código
+                        </button>
+                        <p style="color: #666; font-size: 14px;">💡 Use este código para acompanhar seu pedido</p>
+                        <p>Entraremos em contato em breve para confirmar.</p>
+                        <button class="submit-order-btn" onclick="closeCart()">Fechar</button>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Erro ao enviar pedido:', error);
+                alert('Erro ao enviar pedido. Tente novamente.');
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        window.copyOrderCode = function(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Copiado!';
+                btn.style.background = '#4CAF50';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '#00a868';
+                }, 2000);
+            }).catch(err => {
+                console.error('Erro ao copiar:', err);
+                alert('Código: ' + code);
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #4CAF50;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 3000;
+                animation: slideDown 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // Inicializa a aplicação
+        window.addEventListener('DOMContentLoaded', function() {
+            // Mostra a barra de pesquisa e categorias por padrão (cardápio já está ativo)
+            document.getElementById('searchBar').style.display = 'block';
+            document.getElementById('categoriesNav').style.display = 'flex';
+            renderProducts();
+        });
+
+        // Fecha modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target === modal) {
+                closeCart();
+            }
+        }
+    </script>
+</body>
+</html>
